@@ -21,19 +21,21 @@ void print_block(tblock block){
    }
 }
 
-void var_init_c(codeline * v){
+void var_init_c(codeline * line){
     bool expr = false;
-    if(v->r_type == DOUBLE)
-        printf("double ");
-    else
-        printf("int ");
-    for(int i =0; i< (v->token_list)->length; ++i){
-        token _t = getter(v->token_list,i);
+    if( line->eltype == VARINIT){
+        if(line->r_type == DOUBLE)
+            printf("double ");
+        else
+            printf("int ");
+    }
+    for(int i =0; i< (line->token_list)->length; ++i){
+        token _t = getter(line->token_list,i);
         if(_t.id == COMMA && !expr)
             printf(" , ");
         if(expr && _t.id != NEWLINE)
             printf("%s",_t.text);
-        if(_t.id == VAR)
+        if(_t.id == VAR && !expr)
             printf("%s",_t.text);
         if(_t.id == ASSIGN){
             printf(" = ");
@@ -44,9 +46,9 @@ void var_init_c(codeline * v){
     printf(";\n");
 }
 
-void print_code(codeline  * v){
-    if(v->eltype == VARINIT)
-        var_init_c(v);
+void print_code(codeline  * line){
+    if(line->eltype == VARINIT || line->eltype == VARASSN)
+        var_init_c(line);
     else
         printf("unimplemented code type\n");
 }
@@ -71,7 +73,27 @@ variable get_variables(codeline * c){
     printf("\n");
     return v;
 } 
+
+bool cmpchararr(char * one, char * other){
+    bool exists = true;
+    int n = 0;
+    while(*(one) && *(other))
+        if(*(one++) != *(other++))
+            return false;
+        
+    return true;
+}
     
+
+bool varible_is_def(  codeline * c  ){  
+    token var_name = getter(c->token_list,0);
+    for(int i = 0; i < len(var_table); ++i){
+        char * one = getter(var_table,i).var_name.text;
+        char * other = var_name.text;
+        if(cmpchararr(one,other)) return true;
+    }
+    return false;
+}
     
          
 

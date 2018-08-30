@@ -2,7 +2,7 @@
 #define __FCOMP_H__
 #include <stdio.h>
 #include "y.tab.h"
-#include "../blocks/static_blocks.h"
+#include "blocks/static_blocks.h"
 
 
 typedef struct blocked_token * tblock;
@@ -39,15 +39,17 @@ dynamic_block(variable);
 tblock token_block;
 varblock var_table;
 
-void set_token(int id, int sid);
-void print_code(codeline  * v);
-void var_init_c(codeline * v);
+void set_token(  int id, int sid  );
+void print_code(  codeline  * v  );
+void var_init_c(  codeline * v  );
 void reset();
-void set_token(int id, int sid);
-variable get_variables(codeline * c);
+void set_token(  int id, int sid   );
+variable get_variables(  codeline * c  );
+bool varible_is_def(  codeline * c  );
+bool cmpchararr(char * one, char * other);
 
-void yyerror(char *); 
-int  yylex(void);
+void yyerror( char * ); 
+int  yylex( void );
 int  yyparse();
 
 int counter;
@@ -55,6 +57,6 @@ int scope ;
 int yyleng;
 char * yytext;
 int assign_type;
-codeline v;
+codeline line;
 
 #endif //__FCOMP_H__

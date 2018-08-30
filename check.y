@@ -22,31 +22,38 @@ assignments: assignment assignments
    ;
 assignment: 
    TYPE VAR ASSIGN expression { printf("Assignment.\n"); }
-   | VAR ASSIGN expression    { printf("var assign\n");
+   | VAR ASSIGN expression    { 
 
-       v.token_list = token_block;
-       v.r_type     = assign_type;
-       v.eltype = VARINIT;
+       line.token_list = token_block;
+       line.r_type     = assign_type;
+       if(varible_is_def(&line)) {
+           printf("variable assign\n");
+           line.eltype = VARASSN;
+       }
+       else{
+           printf("variable init\n");
+           line.eltype = VARINIT;
+       }
    }
    | args ASSIGN expression{ printf("var assign\n");
 
-       v.token_list = token_block;
-       v.r_type     = assign_type;
-       v.eltype = VARINIT;
+       line.token_list = token_block;
+       line.r_type     = assign_type;
+       line.eltype = VARINIT;
    }
    | DEF VAR OPAREN args CPAREN COLON   { printf("Func def\n"); 
 
-       v.token_list = token_block;
-       v.eltype = FUNCDEF;
+       line.token_list = token_block;
+       line.eltype = FUNCDEF;
    }
    | VAR                      { printf("Func def\n");    }
    | NEWLINE{ 
-          //print_code(&v);
-          if(v.eltype == VARINIT){
-              variable varb = get_variables(&v);
+          if(line.eltype == VARINIT){
+              variable varb = get_variables(&line);
               varb.scope = scope;
+              append(var_table,varb);
           }
-              
+          print_code(&line);  
           reset();                 
    }
    | IF expression            { printf("If block\n");    }
@@ -58,6 +65,8 @@ args:
 expression:
    number 
    | expression OP number
+   | VAR
+   | expression OP VAR
    | OPAREN expression CPAREN
    ;
 number:
@@ -75,7 +84,9 @@ int main()
  scope = 0;
  token_block = new_block_token();
  var_table   = new_block_variable();
-
+ 
+ if(cmpchararr("this","that")) printf("JJJ\n"); 
+ 
  do{    yyparse();   }
  while (!feof(yyin));
  
