@@ -3,6 +3,11 @@ def fun(a,b):
 	return k
 
 
-def main(a):
-	return 0
+def main():
+	x = fun(1,1) + 9
+	return x
+
+def func():
+	return 10
+
 

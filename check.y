@@ -27,26 +27,32 @@ assignment:
        line.token_list = token_block;
        line.r_type     = assign_type;
        if(varible_is_def(&line)) {
-           //printf("variable assign\n");
            line.eltype = VARASSN;
        }
        else{
-           //printf("variable init\n");
            line.eltype = VARINIT;
        }
    }
-   | args ASSIGN expression{ //printf("var assign\n");
+   | args ASSIGN expression{ 
 
        line.token_list = token_block;
        line.r_type     = assign_type;
        line.eltype = VARINIT;
    }
-   | DEF VAR OPAREN args CPAREN COLON   { //printf("Func def\n"); 
+   | DEF VAR OPAREN CPAREN COLON {
+ 
+       line.token_list = token_block;
+       line.eltype = FUNCDEF;
+       function F = get_function(&line);
+       append(func_table,F);
+   }
+   | DEF VAR OPAREN args CPAREN COLON   { 
 
        line.token_list = token_block;
        line.eltype = FUNCDEF;
+       function F = get_function(&line);
+       append(func_table,F);
    }
-   | VAR                      { printf("Func def\n");    }
    | NEWLINE { 
           if(line.eltype == VARINIT){
               variable varb = get_variables(&line);
@@ -64,14 +70,19 @@ assignment:
           line.token_list = token_block;
           line.eltype = RET;
    }
+   | expression { printf("func call\n"); }
    | EOS {return 0;}
    ;
 args:
     VAR
+   | number
    | args COMMA VAR
+   | args COMMA number
    ;
 expression:
    number 
+   | func_call
+   | expression OP func_call
    | expression OP number
    | VAR
    | expression OP VAR
@@ -83,6 +94,10 @@ number:
    | BOOL 
    | DOUBLE COMMA number
    ;
+func_call:
+   VAR OPAREN args CPAREN
+   | VAR OPAREN CPAREN
+   ;
 %%
 
 extern FILE *yyin;
@@ -93,11 +108,26 @@ int main()
  prev_scope = 0;
  token_block = new_block_token();
  var_table   = new_block_variable();
+ func_table  = new_block_function();
  
  
  do{    yyparse();   }
  while (!feof(yyin));
  
+ printf(" /* functions defined:\n");
+ for(int i = 0; i < len(func_table); ++i)
+ {
+     function F = getter(func_table,i);
+     printf("%s ",F.func_name.text);
+     printf("args = ( ");
+     for(int j = 0; j < len(F.args); ++j)
+     {
+         variable V = getter(F.args,j);
+         printf("%s ", V.var_name.text);
+     }
+     printf(")\n");
+ }
+ printf("*/\n");
 }
 void yyerror(char *s)
 {

@@ -3,6 +3,7 @@
 /* defines functions for manipulating Token_block  */
 dynamic_block_funcs(token);
 dynamic_block_funcs(variable);
+dynamic_block_funcs(function);
 /* */
 
 
@@ -96,11 +97,33 @@ variable get_variables(codeline * c){
     tblock expr = new_block_token();
     v.var_name = getter(c->token_list,0);
     int  i;
-    for(i=2; i < len(c->token_list)-1; ++i){
+    for(i=2; i < len(c->token_list)-1; ++i) 
+    {
         append(expr,getter(c->token_list,i));
     }
     return v;
 } 
+
+function get_function(codeline * c){
+    function F;
+    varblock args = new_block_variable();
+    F.func_name = getter(c->token_list,1);
+    for(int i = 3; i < len(c->token_list); ++i)
+    {
+        token tok = getter(c->token_list , i);
+        if(tok.id == CPAREN) break;
+        if(tok.id == VAR) 
+        {
+            variable V;
+            V.var_name = tok;
+            V.scope = 1;
+            append(args, V); 
+        }
+    }
+    F.args = args;
+    F.r_type = DOUBLE;
+    return F;
+}
 
 bool cmpchararr(char * one, char * other){
     bool exists = true;
@@ -122,6 +145,7 @@ bool varible_is_def(  codeline * c  ){
     }
     return false;
 }
+
     
          
 
