@@ -12,7 +12,8 @@ typedef enum {
     VARINIT,
     FUNCDEF,
     RET,
-    VARASSN
+    VARASSN,
+    WHITESPACE
 } codetype;
 
 typedef struct {
@@ -41,12 +42,12 @@ varblock var_table;
 
 void set_token(  int id, int sid  );
 void print_code(  codeline  * v  );
-void var_init_c(  codeline * v  );
+void var_init_c(  codeline  * v  );
 void reset();
 void set_token(  int id, int sid   );
 variable get_variables(  codeline * c  );
 bool varible_is_def(  codeline * c  );
-bool cmpchararr(char * one, char * other);
+bool cmpchararr(  char * one, char * other  );
 
 void yyerror( char * ); 
 int  yylex( void );
@@ -54,6 +55,9 @@ int  yyparse();
 
 int counter;
 int scope ;
+int prev_scope ;
+
+
 int yyleng;
 char * yytext;
 int assign_type;

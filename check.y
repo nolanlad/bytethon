@@ -6,7 +6,7 @@
         #include "fcomp.h"
 %}
 
-%token DOUBLE INT BOOL ASSIGN OP TYPE CPAREN OPAREN COMMA NEWLINE IF COMP EQ NUM COLON DEF RETURN
+%token DOUBLE INT BOOL ASSIGN OP TYPE CPAREN OPAREN COMMA NEWLINE IF COMP EQ NUM COLON DEF RETURN EOS
 
 %union {
   char *s;
@@ -27,36 +27,44 @@ assignment:
        line.token_list = token_block;
        line.r_type     = assign_type;
        if(varible_is_def(&line)) {
-           printf("variable assign\n");
+           //printf("variable assign\n");
            line.eltype = VARASSN;
        }
        else{
-           printf("variable init\n");
+           //printf("variable init\n");
            line.eltype = VARINIT;
        }
    }
-   | args ASSIGN expression{ printf("var assign\n");
+   | args ASSIGN expression{ //printf("var assign\n");
 
        line.token_list = token_block;
        line.r_type     = assign_type;
        line.eltype = VARINIT;
    }
-   | DEF VAR OPAREN args CPAREN COLON   { printf("Func def\n"); 
+   | DEF VAR OPAREN args CPAREN COLON   { //printf("Func def\n"); 
 
        line.token_list = token_block;
        line.eltype = FUNCDEF;
    }
    | VAR                      { printf("Func def\n");    }
-   | NEWLINE{ 
+   | NEWLINE { 
           if(line.eltype == VARINIT){
               variable varb = get_variables(&line);
               varb.scope = scope;
               append(var_table,varb);
           }
+          if(prev_scope > scope) printf("}\n");
           print_code(&line);  
+          line.eltype = WHITESPACE;
+          line.token_list = token_block;
           reset();                 
    }
    | IF expression            { printf("If block\n");    }
+   | RETURN expression {
+          line.token_list = token_block;
+          line.eltype = RET;
+   }
+   | EOS {return 0;}
    ;
 args:
     VAR
@@ -82,10 +90,10 @@ int main()
 {
  counter = 0;
  scope = 0;
+ prev_scope = 0;
  token_block = new_block_token();
  var_table   = new_block_variable();
  
- if(cmpchararr("this","that")) printf("JJJ\n"); 
  
  do{    yyparse();   }
  while (!feof(yyin));

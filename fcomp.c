@@ -46,16 +46,47 @@ void var_init_c(codeline * line){
     printf(";\n");
 }
 
+void ret_c(codeline * line){
+    for(int i =0; i< len(line->token_list)-1; ++i){
+         token _t = getter(line->token_list,i);
+         printf("%s ",_t.text);
+    }
+    printf(";\n");
+}
+
+
+
+void func_def_c(codeline * line){
+    for(int i = 1; i < len(line->token_list) -2; ++i){
+        if(getter( line->token_list , i ).id == VAR )
+          printf("double ");
+          printf("%s ",  getter( line->token_list , i ).text);
+    }
+    printf("{\n");
+}
+
+
 void print_code(codeline  * line){
-    if(line->eltype == VARINIT || line->eltype == VARASSN)
+    for(int i = 0; i < scope; ++i) printf("\t");
+    if(line->eltype == VARINIT || line->eltype == VARASSN){
         var_init_c(line);
-    else
-        printf("unimplemented code type\n");
+        return;
+    }
+    if (line->eltype == FUNCDEF){
+        func_def_c(line);
+        return;
+    }
+    if (line->eltype == RET){
+        ret_c(line);
+        return;
+    }
+    printf("\n");
 }
 
 void reset(){
     token_block = new_block_token();
     counter = 0;
+    prev_scope = scope;
     scope = 0;
 }
 
@@ -67,10 +98,7 @@ variable get_variables(codeline * c){
     int  i;
     for(i=2; i < len(c->token_list)-1; ++i){
         append(expr,getter(c->token_list,i));
-        printf("%s ", getter(c->token_list,i).text);
-        
     }
-    printf("\n");
     return v;
 } 
 

@@ -11,9 +11,10 @@
 
 %%
 [ ]+ ;
-[\t]                                  { scope++;printf("scope = %d\n",scope); }
+<<EOF>> { return EOS; }
+[\t]                                  { scope++; }
 "def"                                 { set_token(DEF,0);      return DEF;    }
-"return"                              { set_token(RETURN,0)    return RETURN; }
+"return"                              { set_token(RETURN,0) ;   return RETURN; }
 ":"                                   { set_token(COLON,0);    return COLON;  }
 "int"|"float"                         { set_token(TYPE,0);     return TYPE;   }
 "if"                                  { set_token(IF,0);       return IF;     }
