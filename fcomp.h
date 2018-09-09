@@ -40,6 +40,14 @@ typedef struct {
 } variable;
 
 typedef struct {
+    token var_name;
+    int scope;
+    int r_type;
+} variable2;
+
+
+
+typedef struct {
     token func_name;
     int r_type;
     varblock args;

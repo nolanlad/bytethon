@@ -3,7 +3,7 @@
 	#include <stdlib.h>
 	#include <math.h>
 	#include <string.h>
-        #include "fcomp.h"
+    #include "fcomp.h"
 %}
 
 %token DOUBLE INT BOOL ASSIGN OP TYPE CPAREN OPAREN COMMA NEWLINE IF COMP EQ NUM COLON DEF RETURN EOS

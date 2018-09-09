@@ -1,6 +1,6 @@
 
 
-def add(a, b) -> int:
+def add(a, b):
 	return a+b
 
 print(add(9,9))
