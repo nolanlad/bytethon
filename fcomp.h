@@ -5,9 +5,10 @@
 #include "blocks/static_blocks.h"
 
 
-typedef struct blocked_token    * tblock;
-typedef struct blocked_variable * varblock;
-typedef struct blocked_function * funcblock;
+typedef struct blocked_token     * tblock;
+typedef struct blocked_variable  * varblock;
+typedef struct blocked_variable2 * varblock2;
+typedef struct blocked_function  * funcblock;
 
 typedef enum {
     VARINIT,
@@ -25,7 +26,6 @@ typedef struct {
     int sid;
     char * text;
 }  token;
-
 
 typedef struct {
     tblock token_list;
@@ -45,12 +45,15 @@ typedef struct {
     int r_type;
 } variable2;
 
-
+typedef struct {
+    variable2 var;
+    tblock expr;
+} assignment;
 
 typedef struct {
     token func_name;
     int r_type;
-    varblock args;
+    varblock2 args;
 } function;
 
 
@@ -62,13 +65,11 @@ typedef struct {
 typedef struct {
     void * el;
     codetype ct;
-} eric_holder;
-
-
-
+} element;
 
 dynamic_block(token);
 dynamic_block(variable);
+dynamic_block(variable2);
 dynamic_block(function);
 tblock token_block;
 varblock var_table;
@@ -80,8 +81,9 @@ void var_init_c(  codeline  * v  );
 void reset();
 void set_token(  int id, int sid   );
 
-variable get_variables(  codeline * c  );
-function get_function (  codeline * c  );
+variable    get_variables(  codeline * c  );
+function    get_function (  codeline * c  );
+assignment get_assignment(  codeline * c  );
 bool varible_is_def   (  codeline * c  );
 
 bool cmpchararr(  char * one, char * other  );
@@ -99,5 +101,7 @@ int yyleng;
 char * yytext;
 int assign_type;
 codeline line;
+
+element el;
 
 #endif //__FCOMP_H__

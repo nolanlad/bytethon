@@ -3,6 +3,7 @@
 /* defines functions for manipulating Token_block  */
 dynamic_block_funcs(token);
 dynamic_block_funcs(variable);
+dynamic_block_funcs(variable2);
 dynamic_block_funcs(function);
 /* */
 
@@ -104,11 +105,25 @@ variable get_variables(codeline * c){
     return v;
 } 
 
+assignment get_assignment(codeline * c){
+    variable2 v ;
+    assignment assn;
+    v.var_name = getter(c->token_list,0);
+    v.r_type = assign_type;
+    v.scope = scope;
+    assn.var = v;
+    assn.expr = new_block_token();
+    for(int i = 2; i < len(c->token_list); ++i){
+        append(assn.expr,getter(c->token_list,i));
+    }
+    return assn;
+} 
+
 
 
 function get_function(codeline * c){
     function F;
-    varblock args = new_block_variable();
+    varblock2 args = new_block_variable2();
     F.func_name = getter(c->token_list,1);
     for(int i = 3; i < len(c->token_list); ++i)
     {
@@ -116,9 +131,10 @@ function get_function(codeline * c){
         if(tok.id == CPAREN) break;
         if(tok.id == VAR) 
         {
-            variable V;
+            variable2 V;
             V.var_name = tok;
             V.scope = 1;
+            V.r_type = DOUBLE;
             append(args, V); 
         }
     }

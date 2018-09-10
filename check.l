@@ -4,7 +4,7 @@
 	#include "float.h"
 	#include "math.h"
 	#include <string.h>
-        #include "fcomp.h"
+    #include "fcomp.h"
 %}
 
 %option noyywrap

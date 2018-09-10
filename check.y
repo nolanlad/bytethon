@@ -32,6 +32,10 @@ assignment:
        else{
            line.eltype = VARINIT;
        }
+       assignment aas =get_assignment(&line);
+       el.el = (void*)&aas;
+       el.ct = line.eltype;
+       
    }
    | args ASSIGN expression{ 
 
@@ -103,34 +107,36 @@ func_call:
 extern FILE *yyin;
 int main()
 {
- counter = 0;
- scope = 0;
- prev_scope = 0;
- token_block = new_block_token();
- var_table   = new_block_variable();
- func_table  = new_block_function();
+    counter = 0;
+    scope = 0;
+    prev_scope = 0;
+    token_block = new_block_token();
+    var_table   = new_block_variable();
+    func_table  = new_block_function();
+
+
+    do{    
+        yyparse();  
+    }
+    while (!feof(yyin));
  
- 
- do{    yyparse();   }
- while (!feof(yyin));
- 
- printf(" /* functions defined:\n");
- for(int i = 0; i < len(func_table); ++i)
- {
-     function F = getter(func_table,i);
-     printf("%s ",F.func_name.text);
-     printf("args = ( ");
-     for(int j = 0; j < len(F.args); ++j)
-     {
-         variable V = getter(F.args,j);
-         printf("%s ", V.var_name.text);
-     }
-     printf(")\n");
- }
- printf("*/\n");
+    printf(" /* functions defined:\n");
+    for(int i = 0; i < len(func_table); ++i)
+    {
+        function F = getter(func_table,i);
+        printf("%s ",F.func_name.text);
+        printf("args = ( ");
+        for(int j = 0; j < len(F.args); ++j)
+        {
+            variable2 V = getter(F.args,j);
+            printf("%s ", V.var_name.text);
+        }
+        printf(")\n");
+    }
+    printf("*/\n");
 }
+    
 void yyerror(char *s)
 {
-
-   fprintf(stderr, "%s\n", s);
+    fprintf(stderr, "%s\n", s);
 }
