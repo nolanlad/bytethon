@@ -4,6 +4,7 @@
 	#include <math.h>
 	#include <string.h>
     #include "fcomp.h"
+    #include "utilities.h"
 %}
 
 %token DOUBLE INT BOOL ASSIGN OP TYPE CPAREN OPAREN COMMA NEWLINE IF COMP EQ NUM COLON DEF RETURN EOS
@@ -32,16 +33,21 @@ assignment:
        else{
            line.eltype = VARINIT;
        }
-       assignment aas =get_assignment(&line);
-       el.el = (void*)&aas;
-       el.ct = line.eltype;
+       if(scope > 0){
+           element e;
+           assignment aas =get_assignment(&line);
+           append(assns,aas);
+           e.el = last_ptr(assns);
+           e.ct = line.eltype;
+           append(els,e);
+       }
        
    }
    | args ASSIGN expression{ 
 
        line.token_list = token_block;
        line.r_type     = assign_type;
-       line.eltype = VARINIT;
+       line.eltype     = VARINIT;
    }
    | DEF VAR OPAREN CPAREN COLON {
  
@@ -49,6 +55,11 @@ assignment:
        line.eltype = FUNCDEF;
        function F = get_function(&line);
        append(func_table,F);
+       function * Fp = last_ptr(func_table);
+       element e;
+       e.el = Fp;
+       e.ct = FUNCDEF;
+       append(els,e);
    }
    | DEF VAR OPAREN args CPAREN COLON   { 
 
@@ -56,6 +67,11 @@ assignment:
        line.eltype = FUNCDEF;
        function F = get_function(&line);
        append(func_table,F);
+       function * Fp = last_ptr(func_table);
+       element e;
+       e.el = Fp;
+       e.ct = FUNCDEF;
+       append(els,e);
    }
    | NEWLINE { 
           if(line.eltype == VARINIT){
@@ -113,6 +129,8 @@ int main()
     token_block = new_block_token();
     var_table   = new_block_variable();
     func_table  = new_block_function();
+    els         = new_block_element();
+    assns       = new_block_assignment();
 
 
     do{    
@@ -134,6 +152,16 @@ int main()
         printf(")\n");
     }
     printf("*/\n");
+    for(int j = 0; j < len(els); ++j){
+        if(getter(els,j).ct == FUNCDEF) {
+            printf("funcdef\n");
+            function F = *(function*)(getter(els,j).el);
+            printf("%s \n",F.func_name.text);
+        }
+        if(getter(els,j).ct == VARINIT) printf("varinit\n");
+    }
+
+    
 }
     
 void yyerror(char *s)

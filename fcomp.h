@@ -9,6 +9,8 @@ typedef struct blocked_token     * tblock;
 typedef struct blocked_variable  * varblock;
 typedef struct blocked_variable2 * varblock2;
 typedef struct blocked_function  * funcblock;
+typedef struct blocked_element   * elblock;
+typedef struct blocked_assignment* asblock;
 
 typedef enum {
     VARINIT,
@@ -65,28 +67,28 @@ typedef struct {
 typedef struct {
     void * el;
     codetype ct;
+    bool is_block_start;
+    elblock theblock;
 } element;
+
+
 
 dynamic_block(token);
 dynamic_block(variable);
 dynamic_block(variable2);
 dynamic_block(function);
+dynamic_block(element);
+dynamic_block(assignment);
+
+
 tblock token_block;
 varblock var_table;
 funcblock func_table;
+elblock els;
+asblock assns;
 
-void set_token(  int id, int sid  );
 void print_code(  codeline  * v  );
 void var_init_c(  codeline  * v  );
-void reset();
-void set_token(  int id, int sid   );
-
-variable    get_variables(  codeline * c  );
-function    get_function (  codeline * c  );
-assignment get_assignment(  codeline * c  );
-bool varible_is_def   (  codeline * c  );
-
-bool cmpchararr(  char * one, char * other  );
 
 void yyerror( char * ); 
 int  yylex( void );
@@ -101,7 +103,6 @@ int yyleng;
 char * yytext;
 int assign_type;
 codeline line;
-
 element el;
 
 #endif //__FCOMP_H__

@@ -5,6 +5,7 @@
 	#include "math.h"
 	#include <string.h>
     #include "fcomp.h"
+	#include "utilities.h"
 %}
 
 %option noyywrap
@@ -12,7 +13,7 @@
 %%
 [ ]+ ;
 <<EOF>>                               { return EOS; }
-[\t]                                  { scope++; }
+[\t]                                  { scope++;    }
 "def"                                 { set_token(DEF,0);      return DEF;    }
 "return"                              { set_token(RETURN,0) ;  return RETURN; }
 ":"                                   { set_token(COLON,0);    return COLON;  }

@@ -8,6 +8,8 @@ def main():
 	return x
 
 def func():
+	g = 10
+	k = 8
 	return 10
 
 
