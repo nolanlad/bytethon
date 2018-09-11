@@ -1,6 +1,6 @@
 def fun(a,b):
-	k = 11.0+a+b
-	return k
+	kk = 11.0+a+b
+	return kk
 
 
 def main():
@@ -9,7 +9,7 @@ def main():
 
 def func():
 	g = 10
-	k = 8
+	d = 8
 	return 10
 
 

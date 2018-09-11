@@ -21,6 +21,7 @@ typedef enum {
     IFBLOCK,
     FORBLOCK,
     WHILEBLOCK,
+    ENDBLOCK
 } codetype;
 
 typedef struct {
@@ -89,6 +90,10 @@ asblock assns;
 
 void print_code(  codeline  * v  );
 void var_init_c(  codeline  * v  );
+void c_func_def(function F);
+void c_var_init(assignment A);
+void c_var_assn(assignment A);
+void c_return(assignment A);
 
 void yyerror( char * ); 
 int  yylex( void );
