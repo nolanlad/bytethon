@@ -59,6 +59,12 @@ typedef struct {
     varblock2 args;
 } function;
 
+typedef struct {
+    token start;
+    token stop;
+    token step;
+} iterator;
+
 
 
 /**********************************
@@ -70,6 +76,7 @@ typedef struct {
     codetype ct;
     bool is_block_start;
     elblock theblock;
+    int scope;
 } element;
 
 
@@ -94,6 +101,7 @@ void c_func_def(function F);
 void c_var_init(assignment A);
 void c_var_assn(assignment A);
 void c_return(assignment A);
+void c_print_scope(int scope);
 
 void yyerror( char * ); 
 int  yylex( void );

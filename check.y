@@ -35,6 +35,7 @@ assignment:
        }
        if(scope > 0){
            element e;
+           e.scope = scope;
            assignment aas =get_assignment(&line);
            append(assns,aas);
            // e.el = last_ptr(assns);
@@ -60,6 +61,7 @@ assignment:
        // function * Fp = last_ptr(func_table);
        // e.el = Fp;
        element e;
+       e.scope = scope;
        e.el = malloc(sizeof(function));
        memmove(e.el, &F, sizeof(function) );
        e.ct = FUNCDEF;
@@ -73,6 +75,7 @@ assignment:
        append(func_table,F);
        // function * Fp = last_ptr(func_table);
        element e;
+       e.scope = scope;
        // e.el = Fp;
        e.el = malloc(sizeof(function));
        memmove(e.el, &F, sizeof(function) );
@@ -87,6 +90,7 @@ assignment:
        append(func_table,F);
        // function * Fp = last_ptr(func_table);
        element e;
+       e.scope = scope;
        e.el = malloc(sizeof(function));
        memmove(e.el, &F, sizeof(function) );
        // e.el = Fp;
@@ -102,6 +106,7 @@ assignment:
        // function * Fp = last_ptr(func_table);
        // e.el = Fp;
        element e;
+       e.scope = scope;
        e.el = malloc(sizeof(function));
        memmove(e.el, &F, sizeof(function) );
        e.ct = FUNCDEF;
@@ -117,6 +122,7 @@ assignment:
               //printf("}\n");
               element e;
               e.ct = ENDBLOCK;
+              e.scope = scope;
               append(els,e);
           } 
           //print_code(&line);  
@@ -128,6 +134,7 @@ assignment:
         line.token_list = token_block;
         line.eltype = RET;
         element e;
+        e.scope = scope;
         assignment aas = get_return(&line);
         append(assns,aas);
         // e.el = last_ptr(assns);
@@ -136,7 +143,15 @@ assignment:
         e.ct = RETURN;
         append(els,e);
    }
-   | FOR VAR IN RANGE OPAREN args CPAREN COLON
+   | FOR VAR IN RANGE OPAREN args CPAREN COLON { 
+       iterator it = get_range(&line); 
+       element e;
+       e.scope = scope;
+       e.el = malloc(sizeof(assignment));
+       memmove(e.el, &it, sizeof(assignment) );
+       e.ct = FORBLOCK;
+       append(els,e);
+    }
    ;
    | IF expression            { printf("If block\n");    }
    | expression { printf("func call\n"); }
@@ -205,10 +220,18 @@ int main()
     //     printf(")\n");
     // }
     // printf("*/\n");
+    int pscp = 0;
+    int scp  = 0;
     for(int j = 0; j < len(els); ++j){
 
         int type = getter(els,j).ct;
-
+        pscp = scp;
+        scp = getter(els,j).scope;
+        if(pscp > scp) {
+            for(int k = 0;k<scp;++k) printf("\t");
+            printf("}\n");
+        }
+        for(int k = 0;k<scp;++k) printf("\t");
         switch(type){
             function F;
             case FUNCDEF:
@@ -224,16 +247,20 @@ int main()
                 a = *(assignment*)(getter(els,j).el);
                 c_var_assn(a);
                 break;
-            case ENDBLOCK:
-                printf("}\n");
-                break;
+            // case ENDBLOCK:
+                // printf("}\n");
+                // break;
             case RETURN:
                 a = *(assignment*)(getter(els,j).el);
                 c_return(a);
                 // printf("return\n");
                 break;
+            case FORBLOCK:
+                c_print_scope(scope);
+                printf("for(int i = 0; i <10; ++i){\n");
         }
     }
+    printf("}\n");
 
     
 }

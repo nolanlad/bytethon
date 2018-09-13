@@ -13,6 +13,9 @@ def func() -> float:
 	return 10
 
 def foo(a:int, b:int) -> float:
+	for i in range(0,10):
+		g = 10
 	return 10
+
 
 

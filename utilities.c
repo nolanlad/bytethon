@@ -155,3 +155,26 @@ bool varible_is_def(  codeline * c  ){
     }
     return false;
 }
+
+iterator get_range(  codeline * c  )
+{
+    iterator it;
+    int nargs = 0;
+    for(int i = 3; i < len(c->token_list); ++i){
+        token tok = getter(c->token_list , i);
+        if(tok.id == CPAREN) break;
+        if(tok.id == VAR || tok.id == INT) {
+            ++nargs;
+            if(nargs == 2){
+                it.start = it.stop;
+                it.stop  = tok;
+            }
+            if(nargs == 1){
+                it.stop = tok;
+            }
+            if(nargs == 3){
+                it.step = tok;
+            }
+        }
+    }
+}

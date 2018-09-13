@@ -114,7 +114,7 @@ void c_func_def(function F){
 }
 
 void c_var_init(assignment A){
-    c_print_scope(A.var.scope);
+    // c_print_scope(A.var.scope);
     c_print_var(A.var);
     printf(" = ");
     c_print_expr(A.expr);
@@ -122,14 +122,14 @@ void c_var_init(assignment A){
 }
 
 void c_var_assn(assignment A){
-    c_print_scope(A.var.scope);
+    // c_print_scope(A.var.scope);
     printf("%s = ",A.var.var_name.text);
     c_print_expr(A.expr);
     printf(";\n");
 }
 
 void c_return(assignment A){
-    c_print_scope(A.var.scope);
+    // c_print_scope(A.var.scope);
     printf("return ");
     c_print_expr(A.expr);
     printf(";\n");
