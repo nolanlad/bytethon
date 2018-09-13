@@ -102,6 +102,48 @@ function get_function(codeline * c){
     return F;
 } 
 
+function get_typed_function(codeline * c){
+    function F;
+    varblock2 args = new_block_variable2();
+    F.func_name    = getter(c->token_list,1);
+    for(int i = 3; i < len(c->token_list); ++i)
+    {
+        token tok = getter(c->token_list , i);
+        if(tok.id == CPAREN) break;
+        if(tok.id == VAR) 
+        {
+            variable2 V;
+            V.var_name = tok;
+            V.scope    = 1;
+            i+=2;
+            token ty = getter(c->token_list , i);
+            if(ty.id == VAR){
+                if(cmpchararr(ty.text,"int")){
+                    V.r_type = INT;
+                }
+                if(cmpchararr(ty.text,"float")){
+                    V.r_type = DOUBLE;
+                }
+                
+                append(args, V);
+            }
+            else{
+                printf("/* type is all boned up */\n");
+                V.r_type   = DOUBLE;
+            }
+        }
+    }
+    F.args   = args;
+    token tok = getter(c->token_list , len(c->token_list)-2);
+    if(cmpchararr(tok.text,"int")){
+        F.r_type = INT;
+    }
+    if(cmpchararr(tok.text,"float")){
+        F.r_type = DOUBLE;
+    }
+    return F;
+} 
+
 bool varible_is_def(  codeline * c  ){  
     token var_name = getter(c->token_list,0);
     for(int i = 0; i < len(var_table); ++i)

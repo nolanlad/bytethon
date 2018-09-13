@@ -7,7 +7,7 @@
     #include "utilities.h"
 %}
 
-%token DOUBLE INT BOOL ASSIGN OP TYPE CPAREN OPAREN COMMA NEWLINE IF COMP EQ NUM COLON DEF RETURN EOS
+%token DOUBLE INT BOOL ASSIGN OP TYPE CPAREN OPAREN COMMA NEWLINE IF COMP EQ NUM COLON DEF RETURN EOS ARROW FOR IN RANGE
 
 %union {
   char *s;
@@ -37,7 +37,9 @@ assignment:
            element e;
            assignment aas =get_assignment(&line);
            append(assns,aas);
-           e.el = last_ptr(assns);
+           // e.el = last_ptr(assns);
+           e.el = malloc(sizeof(assignment));
+           memmove(e.el,&aas,sizeof(assignment));
            e.ct = line.eltype;
            append(els,e);
        }
@@ -55,9 +57,11 @@ assignment:
        line.eltype = FUNCDEF;
        function F = get_function(&line);
        append(func_table,F);
-       function * Fp = last_ptr(func_table);
+       // function * Fp = last_ptr(func_table);
+       // e.el = Fp;
        element e;
-       e.el = Fp;
+       e.el = malloc(sizeof(function));
+       memmove(e.el, &F, sizeof(function) );
        e.ct = FUNCDEF;
        append(els,e);
    }
@@ -67,9 +71,39 @@ assignment:
        line.eltype = FUNCDEF;
        function F = get_function(&line);
        append(func_table,F);
-       function * Fp = last_ptr(func_table);
+       // function * Fp = last_ptr(func_table);
        element e;
-       e.el = Fp;
+       // e.el = Fp;
+       e.el = malloc(sizeof(function));
+       memmove(e.el, &F, sizeof(function) );
+       e.ct = FUNCDEF;
+       append(els,e);
+   }
+   | DEF VAR OPAREN targs CPAREN ARROW VAR COLON  { 
+
+       line.token_list = token_block;
+       line.eltype = FUNCDEF;
+       function F = get_typed_function(&line);
+       append(func_table,F);
+       // function * Fp = last_ptr(func_table);
+       element e;
+       e.el = malloc(sizeof(function));
+       memmove(e.el, &F, sizeof(function) );
+       // e.el = Fp;
+       e.ct = FUNCDEF;
+       append(els,e);
+   }
+   | DEF VAR OPAREN CPAREN ARROW VAR COLON  { 
+
+       line.token_list = token_block;
+       line.eltype = FUNCDEF;
+       function F = get_typed_function(&line);
+       append(func_table,F);
+       // function * Fp = last_ptr(func_table);
+       // e.el = Fp;
+       element e;
+       e.el = malloc(sizeof(function));
+       memmove(e.el, &F, sizeof(function) );
        e.ct = FUNCDEF;
        append(els,e);
    }
@@ -96,10 +130,14 @@ assignment:
         element e;
         assignment aas = get_return(&line);
         append(assns,aas);
-        e.el = last_ptr(assns);
+        // e.el = last_ptr(assns);
+        e.el = malloc(sizeof(assignment));
+        memmove(e.el, &aas, sizeof(assignment) );
         e.ct = RETURN;
         append(els,e);
    }
+   | FOR VAR IN RANGE OPAREN args CPAREN COLON
+   ;
    | IF expression            { printf("If block\n");    }
    | expression { printf("func call\n"); }
    | EOS {return 0;}
@@ -109,6 +147,10 @@ args:
    | number
    | args COMMA VAR
    | args COMMA number
+   ;
+targs:
+    VAR COLON VAR
+   | targs COMMA VAR COLON VAR
    ;
 expression:
    number 

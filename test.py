@@ -1,15 +1,18 @@
-def fun(a,b):
+def fun(a : float, b : float) -> float:
 	kk = 11.0+a+b
 	return kk
 
 
-def main():
+def main() -> int:
 	x = fun(1,1) + 9
 	return x
 
-def func():
+def func() -> float:
 	g = 10
 	d = 8
+	return 10
+
+def foo(a:int, b:int) -> float:
 	return 10
 
 

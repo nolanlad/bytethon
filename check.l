@@ -16,9 +16,12 @@
 [\t]                                  { scope++;    }
 "def"                                 { set_token(DEF,0);      return DEF;    }
 "return"                              { set_token(RETURN,0) ;  return RETURN; }
+"in"                                  { set_token(IN,0) ;      return IN;     }
+"for"                                 { set_token(FOR,0) ;     return FOR;    }
+"range"                               { set_token(RANGE,0) ;   return RANGE;  }
 ":"                                   { set_token(COLON,0);    return COLON;  }
-"int"|"float"                         { set_token(TYPE,0);     return TYPE;   }
 "if"                                  { set_token(IF,0);       return IF;     }
+"->"                                  { set_token(ARROW,0);    return ARROW;  }
 -?[0-9]+                              { set_token(NUM,INT);    return INT;    }
 -?([0-9]*\.[0-9]+)([eE]?[+-]?[0-9]+)? { set_token(NUM,DOUBLE); return DOUBLE; }
 -?[0-9]*\.                            { set_token(NUM,DOUBLE); return DOUBLE; }

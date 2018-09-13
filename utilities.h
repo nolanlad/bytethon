@@ -13,5 +13,6 @@ assignment get_assignment(  codeline * c  );
 function   get_function  (  codeline * c  );
 bool       varible_is_def(  codeline * c  );
 assignment get_return    (  codeline * c  );
+function get_typed_function(codeline * c);
 
 #endif //__UTILS_H__

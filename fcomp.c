@@ -96,7 +96,10 @@ void c_print_expr(tblock ex){
 }
 
 void c_func_def(function F){
-    printf("double ");
+    if(F.r_type == DOUBLE)
+        printf("double ");
+    if(F.r_type == INT)
+        printf("int ");
     printf("%s",F.func_name.text);
     printf("( ");
 
@@ -104,7 +107,8 @@ void c_func_def(function F){
         for(int i =0; i < len(F.args) -1; ++i){
             c_print_var(getter(F.args,i)); printf(", ");
         }
-        printf("double %s ",getter(F.args,len(F.args)-1).var_name.text);
+        // printf("double %s ",getter(F.args,len(F.args)-1).var_name.text);
+        c_print_var(getter(F.args,len(F.args)-1));
     }
     printf(")\n{\n");
 }
