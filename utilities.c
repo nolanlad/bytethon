@@ -17,8 +17,9 @@ bool cmpchararr(char * one, char * other){
     while(*(one) && *(other))
         if(*(one++) != *(other++))
             return false;
+    return *(one) == *(other);
         
-    return true;
+    // return true;
 }
 
 void set_token(int id, int sid){
@@ -56,6 +57,7 @@ assignment get_assignment(codeline * c){
     v.var_name = getter(c->token_list,0);
     v.r_type   = assign_type;
     v.scope    = scope;
+    v.block_num= block_num;
     assn.var   = v;
     assn.expr  = new_block_token();
     for(int i = 2; i < len(c->token_list); ++i){
@@ -146,6 +148,18 @@ function get_typed_function(codeline * c){
 
 bool varible_is_def(  codeline * c  ){  
     token var_name = getter(c->token_list,0);
+    for(int i = 0; i < len(var_table2); ++i)
+    {
+        char * one   = getter(var_table2,i).var_name.text;
+        char * other = var_name.text;
+
+        if(cmpchararr(one,other)) return true;
+    }
+    return false;
+}
+
+bool varible_is_def2(  variable2 v  ){  
+    token var_name = v.var_name;
     for(int i = 0; i < len(var_table); ++i)
     {
         char * one   = getter(var_table,i).var_name.text;

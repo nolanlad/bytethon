@@ -46,6 +46,7 @@ typedef struct {
     token var_name;
     int scope;
     int r_type;
+    int block_num;
 } variable2;
 
 typedef struct {
@@ -92,6 +93,7 @@ dynamic_block(assignment);
 
 tblock token_block;
 varblock var_table;
+varblock2 var_table2;
 funcblock func_table;
 elblock els;
 asblock assns;
@@ -110,8 +112,9 @@ int  yylex( void );
 int  yyparse();
 
 int counter;
-int scope ;
-int prev_scope ;
+int scope;
+int block_num;
+int prev_scope;
 
 
 int yyleng;
