@@ -159,22 +159,30 @@ bool varible_is_def(  codeline * c  ){
 iterator get_range(  codeline * c  )
 {
     iterator it;
-    int nargs = 0;
-    for(int i = 3; i < len(c->token_list); ++i){
-        token tok = getter(c->token_list , i);
-        if(tok.id == CPAREN) break;
-        if(tok.id == VAR || tok.id == INT) {
-            ++nargs;
-            if(nargs == 2){
-                it.start = it.stop;
-                it.stop  = tok;
-            }
-            if(nargs == 1){
-                it.stop = tok;
-            }
-            if(nargs == 3){
-                it.step = tok;
-            }
+    token default_start;
+    default_start.id = NUM; 
+    default_start.sid = INT; 
+    default_start.text = "0";
+    token default_step;
+    default_step.id = NUM; 
+    default_step.sid = INT; 
+    default_step.text = "1";
+    token var_name = getter(c->token_list,1);
+    it.counter = var_name;
+    int i = 5;
+    if(getter(c->token_list,i+1).id == COMMA){
+        it.start = getter(c->token_list,i);
+        it.stop = getter(c->token_list,i+2);
+        if( getter(c->token_list,i+3).id == COMMA){
+            it.step = getter(c->token_list,i+4);
         }
+        else
+            it.step  = default_step;
     }
+    else{
+        it.stop  = getter(c->token_list,i);
+        it.start = default_start;
+        it.step  = default_step;
+    }
+    return it;
 }

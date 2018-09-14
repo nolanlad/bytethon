@@ -134,3 +134,11 @@ void c_return(assignment A){
     c_print_expr(A.expr);
     printf(";\n");
 }
+
+void c_for_loop(iterator it){
+    printf("for( ");
+    printf("int %s = %s; %s < %s; %s+=(%s) ){\n",
+    it.counter.text, it.start.text,
+    it.counter.text, it.stop.text, 
+    it.counter.text, it.step.text );
+}

@@ -46,6 +46,18 @@ assignment:
        }
        
    }
+   | FOR VAR IN RANGE OPAREN args CPAREN COLON { 
+       line.token_list = token_block;
+       line.eltype = FORBLOCK;
+       iterator it = get_range(&line); 
+    //    printf("for var in range(%s)\n",it.stop.text);
+       element e;
+       e.scope = scope;
+       e.el = malloc(sizeof(iterator));
+       memmove(e.el, &it, sizeof(iterator) );
+       e.ct = FORBLOCK;
+       append(els,e);
+    }
    | args ASSIGN expression{ 
 
        line.token_list = token_block;
@@ -126,6 +138,9 @@ assignment:
               append(els,e);
           } 
           //print_code(&line);  
+        //   for(int i = 0; i < len(line.token_list); ++i){
+        //    printf("%s ",getter(line.token_list,i).text);
+        //   }
           line.eltype = WHITESPACE;
           line.token_list = token_block;
           reset();                 
@@ -143,17 +158,8 @@ assignment:
         e.ct = RETURN;
         append(els,e);
    }
-   | FOR VAR IN RANGE OPAREN args CPAREN COLON { 
-       iterator it = get_range(&line); 
-       element e;
-       e.scope = scope;
-       e.el = malloc(sizeof(assignment));
-       memmove(e.el, &it, sizeof(assignment) );
-       e.ct = FORBLOCK;
-       append(els,e);
-    }
    ;
-   | IF expression            { printf("If block\n");    }
+   | IF expression COLON           { printf("If block\n");    }
    | expression { printf("func call\n"); }
    | EOS {return 0;}
    ;
@@ -257,10 +263,16 @@ int main()
                 break;
             case FORBLOCK:
                 c_print_scope(scope);
-                printf("for(int i = 0; i <10; ++i){\n");
+                //printf("for(int i = 0; i <10; ++i){\n");
+                
+                iterator it = *(iterator*)(getter(els,j).el);
+                
+                // printf("%s\n", it.start.text);
+                c_for_loop(it);
+                break;
         }
     }
-    printf("}\n");
+    // printf("}\n");
 
     
 }

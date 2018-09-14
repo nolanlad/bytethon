@@ -63,6 +63,7 @@ typedef struct {
     token start;
     token stop;
     token step;
+    token counter;
 } iterator;
 
 
@@ -102,6 +103,7 @@ void c_var_init(assignment A);
 void c_var_assn(assignment A);
 void c_return(assignment A);
 void c_print_scope(int scope);
+void c_for_loop(iterator it);
 
 void yyerror( char * ); 
 int  yylex( void );
