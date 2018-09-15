@@ -27,7 +27,8 @@
 -?[0-9]*\.                            { set_token(NUM,DOUBLE); return DOUBLE; }
 [a-zA-Z]+                             { set_token(VAR,0);      return VAR;    } 
 "\.EQ\."                              { set_token(OP,EQ);      return COMP;   } 
-[=]                                   { set_token(ASSIGN,0);   return ASSIGN; }
+={1}                                  { set_token(ASSIGN,0);   return ASSIGN; }
+={2}                                  { set_token(OP,0);       return OP;     }
 [+\-\*\/]                             { set_token(OP,0);       return OP;     }
 \(                                    { set_token(OPAREN,0);   return OPAREN; }
 \)                                    { set_token(CPAREN,0);   return CPAREN; }

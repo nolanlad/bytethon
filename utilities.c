@@ -97,6 +97,7 @@ function get_function(codeline * c){
             V.scope    = 1;
             V.r_type   = DOUBLE;
             append(args, V); 
+            append(var_table2,V);
         }
     }
     F.args   = args;
@@ -128,6 +129,7 @@ function get_typed_function(codeline * c){
                 }
                 
                 append(args, V);
+                append(var_table2,V);
             }
             else{
                 printf("/* type is all boned up */\n");

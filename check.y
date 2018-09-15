@@ -1,8 +1,8 @@
 %{
-	#include <stdio.h>
-	#include <stdlib.h>
-	#include <math.h>
-	#include <string.h>
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <math.h>
+    #include <string.h>
     #include "fcomp.h"
     #include "utilities.h"
 %}
@@ -126,11 +126,11 @@ assignment:
        append(els,e);
    }
    | NEWLINE { 
-          if(line.eltype == VARINIT){
-              variable varb = get_variables(&line);
-              varb.scope = scope;
-              append(var_table,varb);
-          }
+        //   if(line.eltype == VARINIT){
+        //       variable varb = get_variables(&line);
+        //       varb.scope = scope;
+        //       append(var_table,varb);
+        //   }
           if(prev_scope > scope){
               element e;
               e.ct = ENDBLOCK;

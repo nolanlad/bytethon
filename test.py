@@ -15,6 +15,7 @@ def func() -> float:
 
 def foo(a:int, b:int) -> float:
 	l = 0
+	b = 8 == 9
 	for p in range(20):
 		l = p
 	return l
