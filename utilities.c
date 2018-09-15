@@ -160,11 +160,10 @@ bool varible_is_def(  codeline * c  ){
 
 bool varible_is_def2(  variable2 v  ){  
     token var_name = v.var_name;
-    for(int i = 0; i < len(var_table); ++i)
+    for(int i = 0; i < len(var_table2); ++i)
     {
-        char * one   = getter(var_table,i).var_name.text;
+        char * one   = getter(var_table2,i).var_name.text;
         char * other = var_name.text;
-
         if(cmpchararr(one,other)) return true;
     }
     return false;

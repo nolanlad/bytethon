@@ -41,8 +41,12 @@ assignment:
            append(assns,aas);
            e.el = malloc(sizeof(assignment));
            memmove(e.el,&aas,sizeof(assignment));
-           if(varible_is_def2(aas.var)) e.ct = VARASSN;
-           else e.ct = VARINIT;
+           if(varible_is_def2(aas.var)) {
+               e.ct = VARASSN;
+           }
+           else {
+               e.ct = VARINIT;
+           }
            append(els,e);
            append(var_table2,aas.var);
        }
@@ -241,10 +245,7 @@ int main()
                 c_for_loop(it);
                 break;
         }
-    } 
-    for(int p = 0; p < len(var_table2); ++p){
-        printf("%s \n",getter(var_table2,p).var_name.text);
-    }   
+    }  
 }
     
 void yyerror(char *s)
