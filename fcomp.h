@@ -122,5 +122,7 @@ char * yytext;
 int assign_type;
 codeline line;
 element el;
+element e;
+element endel;
 
 #endif //__FCOMP_H__

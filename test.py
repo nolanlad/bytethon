@@ -17,7 +17,8 @@ def foo(a:int, b:int) -> float:
 	l = 0
 	b = 8 == 9
 	for p in range(20):
-		l = p
+		for v in range(1,20,8):
+			l=p
 	return l
 
 

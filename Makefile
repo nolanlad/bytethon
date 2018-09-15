@@ -21,3 +21,5 @@ fcomp.o: fcomp.c
 utilities.o: utilities.c
 	$(CC) -c utilities.c
 
+clean:
+	-rm -f *.o lex.yy.c *.tab.*  calc *.output

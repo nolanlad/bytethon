@@ -35,7 +35,7 @@ assignment:
     //    }
        
        if(scope > 0){
-           element e;
+        //    element e;
            e.scope = scope;
            assignment aas =get_assignment(&line);
            append(assns,aas);
@@ -47,7 +47,7 @@ assignment:
            else {
                e.ct = VARINIT;
            }
-           append(els,e);
+        //    append(els,e);
            append(var_table2,aas.var);
        }
        
@@ -56,12 +56,12 @@ assignment:
        line.token_list = token_block;
        line.eltype = FORBLOCK;
        iterator it = get_range(&line); 
-       element e;
+    //    element e;
        e.scope = scope;
        e.el = malloc(sizeof(iterator));
        memmove(e.el, &it, sizeof(iterator) );
        e.ct = FORBLOCK;
-       append(els,e);
+    //    append(els,e);
     }
    | args ASSIGN expression{ 
 
@@ -76,12 +76,12 @@ assignment:
        line.eltype = FUNCDEF;
        function F = get_function(&line);
        append(func_table,F);
-       element e;
+    //    element e;
        e.scope = scope;
        e.el = malloc(sizeof(function));
        memmove(e.el, &F, sizeof(function) );
        e.ct = FUNCDEF;
-       append(els,e);
+    //    append(els,e);
    }
    | DEF VAR OPAREN args CPAREN COLON   { 
 
@@ -90,12 +90,12 @@ assignment:
        line.eltype = FUNCDEF;
        function F = get_function(&line);
        append(func_table,F);
-       element e;
+    //    element e;
        e.scope = scope;
        e.el = malloc(sizeof(function));
        memmove(e.el, &F, sizeof(function) );
        e.ct = FUNCDEF;
-       append(els,e);
+    //    append(els,e);
    }
    | DEF VAR OPAREN targs CPAREN ARROW VAR COLON  { 
 
@@ -104,12 +104,12 @@ assignment:
        line.eltype = FUNCDEF;
        function F = get_typed_function(&line);
        append(func_table,F);
-       element e;
+    //    element e;
        e.scope = scope;
        e.el = malloc(sizeof(function));
        memmove(e.el, &F, sizeof(function) );
        e.ct = FUNCDEF;
-       append(els,e);
+    //    append(els,e);
    }
    | DEF VAR OPAREN CPAREN ARROW VAR COLON  { 
 
@@ -118,12 +118,12 @@ assignment:
        line.eltype = FUNCDEF;
        function F = get_typed_function(&line);
        append(func_table,F);
-       element e;
+    //    element e;
        e.scope = scope;
        e.el = malloc(sizeof(function));
        memmove(e.el, &F, sizeof(function) );
        e.ct = FUNCDEF;
-       append(els,e);
+    //    append(els,e);
    }
    | NEWLINE { 
         //   if(line.eltype == VARINIT){
@@ -132,11 +132,18 @@ assignment:
         //       append(var_table,varb);
         //   }
           if(prev_scope > scope){
-              element e;
-              e.ct = ENDBLOCK;
-              e.scope = scope;
-              append(els,e);
+            //   element e;
+            for(int k = prev_scope; k > scope; k-- ){
+              endel.scope = scope;
+              append(els,endel);
+            }
+            //   append(els,e);
+            //   e.ct = ENDBLOCK;
+            //   e.scope = scope;
+            //   append(els,e);
           } 
+          append(els,e);
+          e.ct = WHITESPACE;
           line.eltype = WHITESPACE;
           line.token_list = token_block;
           reset();                 
@@ -144,14 +151,14 @@ assignment:
     | RETURN expression {
         line.token_list = token_block;
         line.eltype = RET;
-        element e;
+        // element e;
         e.scope = scope;
         assignment aas = get_return(&line);
         append(assns,aas);
         e.el = malloc(sizeof(assignment));
         memmove(e.el, &aas, sizeof(assignment) );
         e.ct = RETURN;
-        append(els,e);
+        // append(els,e);
    }
    ;
    | IF expression COLON           { printf("If block\n");    }
@@ -196,6 +203,7 @@ int main()
     scope = 0;
     prev_scope = 0;
     block_num = 0;
+    endel.ct = ENDBLOCK;
     token_block = new_block_token();
     var_table   = new_block_variable();
     var_table2   = new_block_variable2();
@@ -215,10 +223,10 @@ int main()
         int type = getter(els,j).ct;
         pscp = scp;
         scp = getter(els,j).scope;
-        if(pscp > scp) {
-            for(int k = 0;k<scp;++k) printf("\t");
-            printf("}\n");
-        }
+        // if(pscp > scp) {
+        //     for(int k = 0;k<scp;++k) printf("\t");
+        //     printf("}\n");
+        // }
         for(int k = 0;k<scp;++k) printf("\t");
         switch(type){
             function F;
@@ -243,6 +251,15 @@ int main()
                 c_print_scope(scope);
                 iterator it = *(iterator*)(getter(els,j).el);
                 c_for_loop(it);
+                break;
+            case ENDBLOCK:
+                c_print_scope(scp-1);
+                //for(int k = 0;k<scp;++k) printf("\t");
+                printf("}\n");
+                break;
+            case WHITESPACE:
+                
+                printf("\n");
                 break;
         }
     }  
