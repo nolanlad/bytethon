@@ -14,13 +14,12 @@ def func() -> float:
 	return 10
 
 def foo(a:int, b:int) -> float:
-	l = 0
+	k = 0
 	b = 8 == 9
 	for p in range(20):
 		for v in range(1,20,8):
-			l=p
-		
-	return l
+			k=p
+	return k
 
 
 

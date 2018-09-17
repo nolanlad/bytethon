@@ -5,6 +5,10 @@
     #include <string.h>
     #include "fcomp.h"
     #include "utilities.h"
+
+    #define append_element(ell,elt) e.scope = scope; \
+    e.el = malloc(sizeof(elt));\
+    memmove(e.el, &ell, sizeof(elt) );
 %}
 
 %token DOUBLE INT BOOL ASSIGN OP TYPE CPAREN OPAREN COMMA NEWLINE IF COMP EQ NUM COLON DEF RETURN EOS ARROW FOR IN RANGE
@@ -36,11 +40,12 @@ assignment:
        
        if(scope > 0){
         //    element e;
-           e.scope = scope;
+        //    e.scope = scope;
            assignment aas =get_assignment(&line);
            append(assns,aas);
-           e.el = malloc(sizeof(assignment));
-           memmove(e.el,&aas,sizeof(assignment));
+        //    e.el = malloc(sizeof(assignment));
+        //    memmove(e.el,&aas,sizeof(assignment));
+           append_element(aas,assignment);
            if(varible_is_def2(aas.var)) {
                e.ct = VARASSN;
            }
@@ -53,13 +58,15 @@ assignment:
        
    }
    | FOR VAR IN RANGE OPAREN args CPAREN COLON { 
+    //    block_num++;
        line.token_list = token_block;
        line.eltype = FORBLOCK;
        iterator it = get_range(&line); 
     //    element e;
-       e.scope = scope;
-       e.el = malloc(sizeof(iterator));
-       memmove(e.el, &it, sizeof(iterator) );
+    //    e.scope = scope;
+    //    e.el = malloc(sizeof(iterator));
+    //    memmove(e.el, &it, sizeof(iterator) );
+       append_element(it,iterator);
        e.ct = FORBLOCK;
     //    append(els,e);
     }
@@ -77,9 +84,10 @@ assignment:
        function F = get_function(&line);
        append(func_table,F);
     //    element e;
-       e.scope = scope;
-       e.el = malloc(sizeof(function));
-       memmove(e.el, &F, sizeof(function) );
+    //    e.scope = scope;
+    //    e.el = malloc(sizeof(function));
+    //    memmove(e.el, &F, sizeof(function) );
+       append_element(F,function);
        e.ct = FUNCDEF;
     //    append(els,e);
    }
@@ -91,9 +99,10 @@ assignment:
        function F = get_function(&line);
        append(func_table,F);
     //    element e;
-       e.scope = scope;
-       e.el = malloc(sizeof(function));
-       memmove(e.el, &F, sizeof(function) );
+    //    e.scope = scope;
+    //    e.el = malloc(sizeof(function));
+    //    memmove(e.el, &F, sizeof(function) );
+       append_element(F,function);
        e.ct = FUNCDEF;
     //    append(els,e);
    }
@@ -105,9 +114,10 @@ assignment:
        function F = get_typed_function(&line);
        append(func_table,F);
     //    element e;
-       e.scope = scope;
-       e.el = malloc(sizeof(function));
-       memmove(e.el, &F, sizeof(function) );
+    //    e.scope = scope;
+    //    e.el = malloc(sizeof(function));
+    //    memmove(e.el, &F, sizeof(function) );
+       append_element(F,function);
        e.ct = FUNCDEF;
     //    append(els,e);
    }
@@ -119,9 +129,10 @@ assignment:
        function F = get_typed_function(&line);
        append(func_table,F);
     //    element e;
-       e.scope = scope;
-       e.el = malloc(sizeof(function));
-       memmove(e.el, &F, sizeof(function) );
+    //    e.scope = scope;
+    //    e.el = malloc(sizeof(function));
+    //    memmove(e.el, &F, sizeof(function) );
+       append_element(F,function);
        e.ct = FUNCDEF;
     //    append(els,e);
    }
@@ -152,11 +163,12 @@ assignment:
         line.token_list = token_block;
         line.eltype = RET;
         // element e;
-        e.scope = scope;
+        // e.scope = scope;
         assignment aas = get_return(&line);
         append(assns,aas);
-        e.el = malloc(sizeof(assignment));
-        memmove(e.el, &aas, sizeof(assignment) );
+        // e.el = malloc(sizeof(assignment));
+        // memmove(e.el, &aas, sizeof(assignment) );
+        append_element(aas,assignment);
         e.ct = RETURN;
         // append(els,e);
    }
@@ -205,7 +217,7 @@ int main()
     block_num = 0;
     endel.ct = ENDBLOCK;
     token_block = new_block_token();
-    var_table   = new_block_variable();
+    //var_table   = new_block_variable();
     var_table2   = new_block_variable2();
     func_table  = new_block_function();
     els         = new_block_element();

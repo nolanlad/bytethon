@@ -3,7 +3,7 @@
 
 /* defines functions for manipulating Token_block  */
 dynamic_block_funcs(token);
-dynamic_block_funcs(variable);
+// dynamic_block_funcs(variable);
 dynamic_block_funcs(variable2);
 dynamic_block_funcs(function);
 dynamic_block_funcs(element);
@@ -39,17 +39,17 @@ void reset(){
 }
 
 //TODO: only works with form b = expr, no m,n = expr1,expr2
-variable get_variables(codeline * c){
-    variable v ;
-    tblock expr = new_block_token();
-    v.var_name  = getter(c->token_list,0);
-    int  i;
-    for(i=2; i < len(c->token_list)-1; ++i) 
-    {
-        append(expr,getter(c->token_list,i));
-    }
-    return v;
-} 
+// variable get_variables(codeline * c){
+//     variable v ;
+//     tblock expr = new_block_token();
+//     v.var_name  = getter(c->token_list,0);
+//     int  i;
+//     for(i=2; i < len(c->token_list)-1; ++i) 
+//     {
+//         append(expr,getter(c->token_list,i));
+//     }
+//     return v;
+// } 
 
 assignment get_assignment(codeline * c){
     variable2 v ;
@@ -166,7 +166,11 @@ bool varible_is_def2(  variable2 v  ){
     {
         char * one   = getter(var_table2,i).var_name.text;
         char * other = var_name.text;
-        if(cmpchararr(one,other)) return true;
+        if(cmpchararr(one,other)) {
+            if(getter(var_table2,i).block_num == v.block_num){
+                return true;
+            }
+        }
     }
     return false;
 }

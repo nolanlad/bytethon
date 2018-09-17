@@ -6,7 +6,7 @@
 
 
 typedef struct blocked_token     * tblock;
-typedef struct blocked_variable  * varblock;
+// typedef struct blocked_variable  * varblock;
 typedef struct blocked_variable2 * varblock2;
 typedef struct blocked_function  * funcblock;
 typedef struct blocked_element   * elblock;
@@ -36,11 +36,11 @@ typedef struct {
     int r_type;
 } codeline ;
 
-typedef struct {
-    token var_name;
-    tblock expr;
-    int scope;
-} variable;
+// typedef struct {
+//     token var_name;
+//     tblock expr;
+//     int scope;
+// } variable;
 
 typedef struct {
     token var_name;
@@ -84,7 +84,7 @@ typedef struct {
 
 
 dynamic_block(token);
-dynamic_block(variable);
+// dynamic_block(variable);
 dynamic_block(variable2);
 dynamic_block(function);
 dynamic_block(element);
@@ -92,7 +92,7 @@ dynamic_block(assignment);
 
 
 tblock token_block;
-varblock var_table;
+// varblock var_table;
 varblock2 var_table2;
 funcblock func_table;
 elblock els;
