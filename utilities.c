@@ -3,7 +3,6 @@
 
 /* defines functions for manipulating Token_block  */
 dynamic_block_funcs(token);
-// dynamic_block_funcs(variable);
 dynamic_block_funcs(variable2);
 dynamic_block_funcs(function);
 dynamic_block_funcs(element);
@@ -19,7 +18,6 @@ bool cmpchararr(char * one, char * other){
             return false;
     return *(one) == *(other);
         
-    // return true;
 }
 
 void set_token(int id, int sid){
@@ -37,19 +35,6 @@ void reset(){
     prev_scope  = scope;
     scope       = 0;
 }
-
-//TODO: only works with form b = expr, no m,n = expr1,expr2
-// variable get_variables(codeline * c){
-//     variable v ;
-//     tblock expr = new_block_token();
-//     v.var_name  = getter(c->token_list,0);
-//     int  i;
-//     for(i=2; i < len(c->token_list)-1; ++i) 
-//     {
-//         append(expr,getter(c->token_list,i));
-//     }
-//     return v;
-// } 
 
 assignment get_assignment(codeline * c){
     variable2 v ;

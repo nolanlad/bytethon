@@ -8,7 +8,6 @@ bool cmpchararr(char * one, char * other);
 void set_token(int id, int sid);
 void reset();
 
-// variable   get_variables (  codeline * c  );
 assignment get_assignment(  codeline * c  );
 function   get_function  (  codeline * c  );
 bool       varible_is_def(  codeline * c  );
