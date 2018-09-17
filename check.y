@@ -6,9 +6,11 @@
     #include "fcomp.h"
     #include "utilities.h"
 
-    #define append_element(ell,elt) e.scope = scope; \
-    e.el = malloc(sizeof(elt));\
-    memmove(e.el, &ell, sizeof(elt) );
+    #define append_element(ell,elt) \
+        e.scope = scope; \
+        e.el = malloc(sizeof(elt));\
+        memmove(e.el, &ell, sizeof(elt) );
+
 %}
 
 %token DOUBLE INT BOOL ASSIGN OP TYPE CPAREN OPAREN COMMA NEWLINE IF COMP EQ NUM COLON DEF RETURN EOS ARROW FOR IN RANGE
