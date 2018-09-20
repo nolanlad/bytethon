@@ -54,6 +54,13 @@ assignment:
        append_element(it,iterator);
        e.ct = FORBLOCK;
     }
+   | IF expression COLON {
+       line.token_list = token_block;
+       line.eltype = FORBLOCK;
+       ifwhile iff = get_ifwhile(&line);
+       append_element(iff,ifwhile);
+       e.ct = IFBLOCK;
+   }
    | args ASSIGN expression{ 
 
        line.token_list = token_block;
@@ -123,7 +130,7 @@ assignment:
         e.ct = RETURN;
    }
    ;
-   | IF expression COLON           { printf("If block\n");    }
+   
    | expression { printf("func call\n"); }
    | EOS {return 0;}
    ;
@@ -213,6 +220,10 @@ int main()
                 c_print_scope(scp-1);
                 printf("}\n");
                 break;
+            case IFBLOCK:
+                c_print_scope(scope);
+                ifwhile iff = *(ifwhile*)(getter(els,j).el);
+                c_if(iff);
             case WHITESPACE:
                 
                 printf("\n");

@@ -60,7 +60,9 @@ typedef struct {
     token counter;
 } iterator;
 
-
+typedef struct {
+    tblock expr;
+} ifwhile;
 
 /**********************************
  *  Super abstract code holder    *
@@ -74,14 +76,11 @@ typedef struct {
     int scope;
 } element;
 
-
-
 dynamic_block(token);
 dynamic_block(variable2);
 dynamic_block(function);
 dynamic_block(element);
 dynamic_block(assignment);
-
 
 tblock token_block;
 varblock2 var_table2;
@@ -97,6 +96,7 @@ void c_var_assn(assignment A);
 void c_return(assignment A);
 void c_print_scope(int scope);
 void c_for_loop(iterator it);
+void c_if(ifwhile iff);
 
 void yyerror( char * ); 
 int  yylex( void );
@@ -106,7 +106,6 @@ int counter;
 int scope;
 int block_num;
 int prev_scope;
-
 
 int yyleng;
 char * yytext;

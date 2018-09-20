@@ -15,5 +15,6 @@ bool       varible_is_def2(  variable2 v  );
 assignment get_return    (  codeline * c  );
 function   get_typed_function(codeline * c);
 iterator   get_range     (  codeline * c  );
+ifwhile    get_ifwhile   (  codeline * c  );
 
 #endif //__UTILS_H__

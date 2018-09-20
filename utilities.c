@@ -133,6 +133,15 @@ function get_typed_function(codeline * c){
     return F;
 } 
 
+ifwhile get_ifwhile(codeline * c){
+    ifwhile out;
+    out.expr = new_block_token();
+    for(int i = 1; i < len(c->token_list)-1;++i){
+        append(out.expr, getter(c->token_list,i) );
+    }
+    return out;
+}
+
 bool varible_is_def(  codeline * c  ){  
     token var_name = getter(c->token_list,0);
     for(int i = 0; i < len(var_table2); ++i)

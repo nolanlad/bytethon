@@ -11,6 +11,8 @@ def func() -> float:
 	g = 10
 	d = 8
 	g = d
+	if g == 10:
+		return 1
 	return 10
 
 def foo(a:int, b:int) -> float:
