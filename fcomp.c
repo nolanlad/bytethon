@@ -69,6 +69,12 @@ void c_if(ifwhile iff){
     printf("){");
 }
 
+void c_while(ifwhile iff){
+    printf("while( ");
+    c_print_expr(iff.expr);
+    printf("){");
+}
+
 void c_for_loop(iterator it){
     printf("for( ");
     printf("int %s = %s; %s < %s; %s+=(%s) ){\n",

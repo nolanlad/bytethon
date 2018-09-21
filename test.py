@@ -13,6 +13,7 @@ def func() -> float:
 	g = d
 	if g == 10:
 		return 1
+	n = 1
 	return 10
 
 def foo(a:int, b:int) -> float:

@@ -97,6 +97,7 @@ void c_return(assignment A);
 void c_print_scope(int scope);
 void c_for_loop(iterator it);
 void c_if(ifwhile iff);
+void c_while(ifwhile iff);
 
 void yyerror( char * ); 
 int  yylex( void );

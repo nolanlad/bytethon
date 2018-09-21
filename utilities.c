@@ -136,7 +136,7 @@ function get_typed_function(codeline * c){
 ifwhile get_ifwhile(codeline * c){
     ifwhile out;
     out.expr = new_block_token();
-    for(int i = 1; i < len(c->token_list)-1;++i){
+    for(int i = 1; i < len(c->token_list);++i){
         append(out.expr, getter(c->token_list,i) );
     }
     return out;

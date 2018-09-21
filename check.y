@@ -13,7 +13,7 @@
 
 %}
 
-%token DOUBLE INT BOOL ASSIGN OP TYPE CPAREN OPAREN COMMA NEWLINE IF COMP EQ NUM COLON DEF RETURN EOS ARROW FOR IN RANGE
+%token DOUBLE INT BOOL ASSIGN OP TYPE CPAREN OPAREN COMMA NEWLINE IF COMP EQ NUM COLON DEF RETURN EOS ARROW FOR IN RANGE WHILE
 
 %union {
   char *s;
@@ -60,6 +60,13 @@ assignment:
        ifwhile iff = get_ifwhile(&line);
        append_element(iff,ifwhile);
        e.ct = IFBLOCK;
+   }
+   | WHILE expression COLON {
+       line.token_list = token_block;
+       line.eltype = WHILEBLOCK;
+       ifwhile iff = get_ifwhile(&line);
+       append_element(iff,ifwhile);
+       e.ct = WHILEBLOCK;
    }
    | args ASSIGN expression{ 
 
@@ -224,6 +231,10 @@ int main()
                 c_print_scope(scope);
                 ifwhile iff = *(ifwhile*)(getter(els,j).el);
                 c_if(iff);
+                break;
+            case WHILEBLOCK:
+                printf("while\n");
+                break;
             case WHITESPACE:
                 
                 printf("\n");
