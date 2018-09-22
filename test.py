@@ -11,9 +11,12 @@ def func() -> float:
 	g = 10
 	d = 8
 	g = d
-	if g == 10:
-		return 1
-	n = 1
+	while g == 10:
+                if d == 8:
+                        return 1
+                if d == 6:
+                        return 2
+        n = 1
 	return 10
 
 def foo(a:int, b:int) -> float:

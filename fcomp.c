@@ -32,6 +32,8 @@ void c_func_def(function F){
         printf("double ");
     if(F.r_type == INT)
         printf("int ");
+    if(F.r_type == BOOL)
+        printf("bool ");
     printf("%s",F.func_name.text);
     printf("( ");
 
@@ -66,13 +68,13 @@ void c_return(assignment A){
 void c_if(ifwhile iff){
     printf("if( ");
     c_print_expr(iff.expr);
-    printf("){");
+    printf("){\n");
 }
 
 void c_while(ifwhile iff){
     printf("while( ");
     c_print_expr(iff.expr);
-    printf("){");
+    printf("){\n");
 }
 
 void c_for_loop(iterator it){

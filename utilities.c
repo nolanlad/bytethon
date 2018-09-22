@@ -112,6 +112,9 @@ function get_typed_function(codeline * c){
                 if(cmpchararr(ty.text,"float")){
                     V.r_type = DOUBLE;
                 }
+                if(cmpchararr(ty.text,"bool")){
+                    V.r_type = BOOL;
+                }
                 
                 append(args, V);
                 append(var_table2,V);

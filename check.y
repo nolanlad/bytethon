@@ -27,8 +27,7 @@ assignments: assignment assignments
    | assignment
    ;
 assignment: 
-   TYPE VAR ASSIGN expression { printf("Assignment.\n"); }
-   | VAR ASSIGN expression    { 
+   VAR ASSIGN expression    { 
 
        line.token_list = token_block;
        line.r_type     = assign_type;
@@ -137,8 +136,6 @@ assignment:
         e.ct = RETURN;
    }
    ;
-   
-   | expression { printf("func call\n"); }
    | EOS {return 0;}
    ;
 args:
@@ -163,7 +160,7 @@ expression:
 number:
    DOUBLE { assign_type = DOUBLE; }
    | INT  { assign_type = INT; }
-   | BOOL 
+   | BOOL { assign_type = BOOL; }
    | DOUBLE COMMA number
    ;
 func_call:
@@ -181,7 +178,7 @@ int main()
     block_num = 0;
     endel.ct = ENDBLOCK;
     token_block = new_block_token();
-    var_table2   = new_block_variable2();
+    var_table2  = new_block_variable2();
     func_table  = new_block_function();
     els         = new_block_element();
     assns       = new_block_assignment();
@@ -190,7 +187,7 @@ int main()
         yyparse();  
     }
     while (!feof(yyin));
- 
+    printf("\n");
     int pscp = 0;
     int scp  = 0;
     for(int j = 0; j < len(els); ++j){
@@ -223,20 +220,21 @@ int main()
                 iterator it = *(iterator*)(getter(els,j).el);
                 c_for_loop(it);
                 break;
-            case ENDBLOCK:
-                c_print_scope(scp-1);
-                printf("}\n");
-                break;
             case IFBLOCK:
                 c_print_scope(scope);
                 ifwhile iff = *(ifwhile*)(getter(els,j).el);
                 c_if(iff);
                 break;
             case WHILEBLOCK:
-                printf("while\n");
+		c_print_scope(scope);
+		ifwhile whi = *(ifwhile*)(getter(els,j).el);
+                c_while(whi);
+                break;
+	    case ENDBLOCK:
+                c_print_scope(scp-1);
+                printf("}\n");
                 break;
             case WHITESPACE:
-                
                 printf("\n");
                 break;
         }
