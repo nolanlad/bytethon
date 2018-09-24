@@ -115,6 +115,9 @@ function get_typed_function(codeline * c){
                 if(cmpchararr(ty.text,"bool")){
                     V.r_type = BOOL;
                 }
+                if(cmpchararr(ty.text,"bool")){
+                    V.r_type = TYPE;
+                }
                 
                 append(args, V);
                 append(var_table2,V);

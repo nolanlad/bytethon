@@ -13,7 +13,9 @@
 
 %}
 
-%token DOUBLE INT BOOL ASSIGN OP TYPE CPAREN OPAREN COMMA NEWLINE IF COMP EQ NUM COLON DEF RETURN EOS ARROW FOR IN RANGE WHILE
+%token DOUBLE INT BOOL ASSIGN OP TYPE CPAREN OPAREN 
+%token COMMA NEWLINE IF COMP EQ NUM COLON DEF RETURN 
+%token EOS ARROW FOR IN RANGE WHILE CLASS
 
 %union {
   char *s;
@@ -45,6 +47,12 @@ assignment:
            append(var_table2,aas.var);
        }
        
+   }
+   | CLASS VAR COLON {
+       line.token_list = token_block;
+       line.eltype = FORBLOCK;
+       e.ct = WHITESPACE;
+       append(els,e);
    }
    | FOR VAR IN RANGE OPAREN args CPAREN COLON { 
        line.token_list = token_block;
