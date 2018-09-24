@@ -16,6 +16,27 @@
         ep->el = malloc(sizeof(elt));\
         memmove(ep->el, &ell, sizeof(elt) );
 
+    #define append_element3(ep,ell,elt) \
+        ep->scope = scope; \
+        ep->el = malloc(sizeof(elt));\
+        memmove(ep->el, &ell, sizeof(elt) );\
+        append(els,(*ep));
+
+    #define append_element4(ells,ell,elt) \
+        element * ep = &e;\
+        ep->scope = scope; \
+        ep->el = malloc(sizeof(elt));\
+        memmove(ep->el, &ell, sizeof(elt) );\
+        append(ells,(*ep));
+
+    #define is_end_block()\
+        if(prev_scope > scope){\
+            for(int k = prev_scope; k > scope; k-- ){\
+              endel.scope = scope;\
+              append(els,endel);\
+            }\
+          } 
+
 %}
 
 %token DOUBLE INT BOOL ASSIGN OP TYPE CPAREN OPAREN 
@@ -35,54 +56,58 @@ assignments: assignment assignments
    ;
 assignment: 
    VAR ASSIGN expression    { 
-
+       is_end_block();
        line.token_list = token_block;
        line.r_type     = assign_type;
        
        if(scope > 0){
            assignment aas =get_assignment(&line);
            append(assns,aas);
-           element * ep = &e;
-           append_element2(ep,aas,assignment);
            if(varible_is_def2(aas.var)) {
                e.ct = VARASSN;
            }
            else {
                e.ct = VARINIT;
            }
+           append_element4(els,aas,assignment);
+           e.ct = WHITESPACE;
            append(var_table2,aas.var);
        }
        
    }
    | CLASS VAR COLON {
+       block_type = CLASS;
        line.token_list = token_block;
        line.eltype = FORBLOCK;
        e.ct = WHITESPACE;
        append(els,e);
    }
    | FOR VAR IN RANGE OPAREN args CPAREN COLON { 
+       block_type = FORBLOCK;
+       is_end_block();
        line.token_list = token_block;
        line.eltype = FORBLOCK;
        iterator it = get_range(&line); 
-       element * ep = &e;
-       append_element2(ep,it,iterator);
        e.ct = FORBLOCK;
+       append_element4(els,it,iterator);
+       
     }
    | IF expression COLON {
+       is_end_block();
        line.token_list = token_block;
        line.eltype = FORBLOCK;
-       element * ep = &e;
        ifwhile iff = get_ifwhile(&line);
-       append_element2(ep,iff,ifwhile);
        e.ct = IFBLOCK;
+       append_element4(els,iff,ifwhile);
+       
    }
    | WHILE expression COLON {
+       is_end_block();
        line.token_list = token_block;
        line.eltype = WHILEBLOCK;
-       element * ep = &e;
        ifwhile iff = get_ifwhile(&line);
-       append_element2(ep,iff,ifwhile);
        e.ct = WHILEBLOCK;
+       append_element4(els,iff,ifwhile);
    }
    | args ASSIGN expression{ 
 
@@ -91,71 +116,65 @@ assignment:
        line.eltype     = VARINIT;
    }
    | DEF VAR OPAREN CPAREN COLON {
- 
+       is_end_block();
        block_num++;
        line.token_list = token_block;
        line.eltype = FUNCDEF;
        function F = get_function(&line);
        append(func_table,F);
-       element * ep = &e;
-       append_element2(ep,F,function);
        e.ct = FUNCDEF;
+       append_element4(els,F,function);
    }
    | DEF VAR OPAREN args CPAREN COLON   { 
-
+       is_end_block();
        block_num++;
        line.token_list = token_block;
        line.eltype = FUNCDEF;
        function F = get_function(&line);
        append(func_table,F);
        element * ep = &e;
-       append_element2(ep,F,function);
        e.ct = FUNCDEF;
+       append_element3(ep,F,function);
    }
    | DEF VAR OPAREN targs CPAREN ARROW VAR COLON  { 
-
+       is_end_block();
        block_num++;
        line.token_list = token_block;
        line.eltype = FUNCDEF;
        function F = get_typed_function(&line);
        append(func_table,F);
        element * ep = &e;
-       append_element2(ep,F,function);
        e.ct = FUNCDEF;
+       append_element3(ep,F,function);
    }
    | DEF VAR OPAREN CPAREN ARROW VAR COLON  { 
-
+       is_end_block();
        block_num++;
        line.token_list = token_block;
        line.eltype = FUNCDEF;
        function F = get_typed_function(&line);
        append(func_table,F);
        element * ep = &e;
-       append_element2(ep,F,function);
        e.ct = FUNCDEF;
+       append_element3(ep,F,function);
     
    }
    | NEWLINE { 
-          if(prev_scope > scope){
-            for(int k = prev_scope; k > scope; k-- ){
-              endel.scope = scope;
-              append(els,endel);
-            }
-          } 
-          append(els,e);
+        // is_end_block();
           e.ct = WHITESPACE;
           line.eltype = WHITESPACE;
           line.token_list = token_block;
           reset();                 
    }
     | RETURN expression {
+        is_end_block();
         line.token_list = token_block;
         line.eltype = RET;
         assignment aas = get_return(&line);
         append(assns,aas);
         element * ep = &e;
-        append_element2(ep,aas,assignment);
         e.ct = RETURN;
+        append_element3(ep,aas,assignment);
    }
    ;
    | EOS {return 0;}
@@ -248,8 +267,8 @@ int main()
                 c_if(iff);
                 break;
             case WHILEBLOCK:
-		c_print_scope(scope);
-		ifwhile whi = *(ifwhile*)(getter(els,j).el);
+		        c_print_scope(scope);
+		        ifwhile whi = *(ifwhile*)(getter(els,j).el);
                 c_while(whi);
                 break;
 	    case ENDBLOCK:

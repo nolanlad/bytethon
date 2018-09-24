@@ -4,14 +4,14 @@
 	#include "float.h"
 	#include "math.h"
 	#include <string.h>
-        #include "fcomp.h"
+    #include "fcomp.h"
 	#include "utilities.h"
 %}
 
 %option noyywrap
 
 %%
-[ ]{4}                                { scope++;    }
+[ ]{4}                                { scope++;          /* return INDENT;*/ }
 <<EOF>>                               { return EOS; }
 [\t]                                  { scope++;    }
 "def"                                 { set_token(DEF,0);      return DEF;    }
@@ -28,7 +28,6 @@
 -?([0-9]*\.[0-9]+)([eE]?[+-]?[0-9]+)? { set_token(NUM,DOUBLE); return DOUBLE; }
 -?[0-9]*\.                            { set_token(NUM,DOUBLE); return DOUBLE; }
 [_a-zA-Z]+                            { set_token(VAR,0);      return VAR;    } 
-"\.EQ\."                              { set_token(OP,EQ);      return COMP;   } 
 "<"|">"|"<="|">="|"!="                { set_token(OP,0);       return OP;     } 
 ={1}                                  { set_token(ASSIGN,0);   return ASSIGN; }
 ={2}                                  { set_token(OP,0);       return OP;     }
