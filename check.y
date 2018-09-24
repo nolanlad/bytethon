@@ -11,6 +11,11 @@
         e.el = malloc(sizeof(elt));\
         memmove(e.el, &ell, sizeof(elt) );
 
+    #define append_element2(ep,ell,elt) \
+        ep->scope = scope; \
+        ep->el = malloc(sizeof(elt));\
+        memmove(ep->el, &ell, sizeof(elt) );
+
 %}
 
 %token DOUBLE INT BOOL ASSIGN OP TYPE CPAREN OPAREN 
@@ -37,7 +42,8 @@ assignment:
        if(scope > 0){
            assignment aas =get_assignment(&line);
            append(assns,aas);
-           append_element(aas,assignment);
+           element * ep = &e;
+           append_element2(ep,aas,assignment);
            if(varible_is_def2(aas.var)) {
                e.ct = VARASSN;
            }
@@ -58,21 +64,24 @@ assignment:
        line.token_list = token_block;
        line.eltype = FORBLOCK;
        iterator it = get_range(&line); 
-       append_element(it,iterator);
+       element * ep = &e;
+       append_element2(ep,it,iterator);
        e.ct = FORBLOCK;
     }
    | IF expression COLON {
        line.token_list = token_block;
        line.eltype = FORBLOCK;
+       element * ep = &e;
        ifwhile iff = get_ifwhile(&line);
-       append_element(iff,ifwhile);
+       append_element2(ep,iff,ifwhile);
        e.ct = IFBLOCK;
    }
    | WHILE expression COLON {
        line.token_list = token_block;
        line.eltype = WHILEBLOCK;
+       element * ep = &e;
        ifwhile iff = get_ifwhile(&line);
-       append_element(iff,ifwhile);
+       append_element2(ep,iff,ifwhile);
        e.ct = WHILEBLOCK;
    }
    | args ASSIGN expression{ 
@@ -88,7 +97,8 @@ assignment:
        line.eltype = FUNCDEF;
        function F = get_function(&line);
        append(func_table,F);
-       append_element(F,function);
+       element * ep = &e;
+       append_element2(ep,F,function);
        e.ct = FUNCDEF;
    }
    | DEF VAR OPAREN args CPAREN COLON   { 
@@ -98,7 +108,8 @@ assignment:
        line.eltype = FUNCDEF;
        function F = get_function(&line);
        append(func_table,F);
-       append_element(F,function);
+       element * ep = &e;
+       append_element2(ep,F,function);
        e.ct = FUNCDEF;
    }
    | DEF VAR OPAREN targs CPAREN ARROW VAR COLON  { 
@@ -108,7 +119,8 @@ assignment:
        line.eltype = FUNCDEF;
        function F = get_typed_function(&line);
        append(func_table,F);
-       append_element(F,function);
+       element * ep = &e;
+       append_element2(ep,F,function);
        e.ct = FUNCDEF;
    }
    | DEF VAR OPAREN CPAREN ARROW VAR COLON  { 
@@ -118,7 +130,8 @@ assignment:
        line.eltype = FUNCDEF;
        function F = get_typed_function(&line);
        append(func_table,F);
-       append_element(F,function);
+       element * ep = &e;
+       append_element2(ep,F,function);
        e.ct = FUNCDEF;
     
    }
@@ -140,7 +153,8 @@ assignment:
         line.eltype = RET;
         assignment aas = get_return(&line);
         append(assns,aas);
-        append_element(aas,assignment);
+        element * ep = &e;
+        append_element2(ep,aas,assignment);
         e.ct = RETURN;
    }
    ;

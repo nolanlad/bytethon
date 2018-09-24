@@ -136,6 +136,9 @@ function get_typed_function(codeline * c){
     if(cmpchararr(tok.text,"float")){
         F.r_type = DOUBLE;
     }
+    if(cmpchararr(tok.text,"bool")){
+        F.r_type = BOOL;
+    }
     return F;
 } 
 

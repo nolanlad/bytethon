@@ -1,7 +1,3 @@
-class Person:
-    def __init__(self:int)->None:
-        return 1
-
 def main() -> int:
     x = 8
     if x == 8:
